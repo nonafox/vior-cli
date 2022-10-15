@@ -1,0 +1,20 @@
+{
+    "name": "vior-cli",
+    "version": "1.0.0",
+    "description": "A simple CLI for Vior.",
+    "main": "src/index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jwhgzs/vior-cli.git"
+    },
+    "keywords": ["vior", "cli", "jwhgzs"],
+    "author": "jwhgzs",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/jwhgzs/vior-cli/issues"
+    },
+    "homepage": "https://github.com/jwhgzs/vior-cli#readme"
+}
