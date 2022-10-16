@@ -6,6 +6,7 @@ import chalk from 'chalk'
 import fs from 'fs'
 import ora from 'ora'
 
+import Util from './util.js'
 import TDom from 'vior/src/tdom.js'
 let tdom = new TDom()
 
@@ -17,7 +18,7 @@ console.log()
 
 if (! fs.existsSync(rpath + '/dist'))
     fs.mkdirSync(rpath + '/dist')
-let arr = fs.readdirSync(rpath + '/src')
+let arr = fs.readdirSync(rpath + '/src'), imports = {}
 for (let k in arr) {
     let v = arr[k]
     if (! /\.vior\.html$/.test(v))
@@ -43,9 +44,32 @@ for (let k in arr) {
     }
     
     let res = read.js
-    res = res.replace(/export\s*default\s*{\s*/, `export default { html: '${read.html}', `)
-    fs.writeFileSync(rpath + '/dist/' + v.replace(/\.vior\.html$/, '.js'), res)
+    res = Util.scriptReplace(res, /export\s*default\s*{\s*/, `export default { html: '${read.html}', `)
+    let name_js = v.replace(/\.vior\.html$/, '.js'),
+        name = v.replace(/\.vior\.html$/, ''),
+        name_ori = v
+    fs.writeFileSync(rpath + '/dist/' + name_js, res)
+    
+    imports[name] = './dist/' + name_js
 }
+arr = fs.readdirSync(rpath + '/node_modules')
+for (let k in arr) {
+    let v = arr[k]
+    if (fs.statSync(rpath + '/node_modules/' + v).isDirectory()) {
+        let fpath = rpath + '/node_modules/' + v
+        let config = JSON.parse(fs.readFileSync(fpath + '/package.json'))
+        imports[v + '/'] = './node_modules/' + v + '/'
+        imports[v] = './node_modules/' + v + '/' + (config.main || '')
+    }
+}
+
+let content = fs.readFileSync(rpath + '/_index.html', 'utf-8')
+let importMap = {
+    imports: imports
+}
+let repHtml = `<script type="importmap">${JSON.stringify(importMap)}</script>\n</head>`
+content = Util.scriptReplace(content, `</head>`, repHtml)
+fs.writeFileSync(rpath + '/index.html', content)
 
 spinner.stop()
 console.log(chalk.green('compile complete!'))
