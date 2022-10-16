@@ -1,10 +1,25 @@
 {
     "name": "vior-cli",
-    "version": "1.0.0",
+    "type": "module",
+    "version": "0.1.0",
     "description": "A simple CLI for Vior.",
     "main": "src/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "vior": "bin/vior.js",
+        "vior-init": "bin/vior-init.js",
+        "vior-complile": "bin/vior-complile.js"
+    },
+    "dependencies": {
+        "vior": "^0.4.0",
+        "inquirer": "^4.0.0",
+        "ora": "^1.3.0",
+        "rimraf": "^2.6.2",
+        "chalk": "^2.3.0",
+        "commander": "^2.11.0",
+        "download-git-repo": "^1.0.1"
     },
     "repository": {
         "type": "git",
