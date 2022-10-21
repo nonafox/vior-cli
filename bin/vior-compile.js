@@ -29,28 +29,33 @@ for (let k in arr) {
         content = fs.readFileSync(rpath + '/src/' + v, 'utf-8')
         tree = tdom.read(content).children
     } catch (ex) {
-        console.log(chalk.red('error when paring file: ' + v))
+        console.log(chalk.red('error when paring file: src/' + v))
         process.exit(1)
     }
+    
+    let name_js = v.replace(/\.vior\.html$/, '.js'),
+        name = v.replace(/\.vior\.html$/, ''),
+        name_ori = v
     
     let read = { html: null, js: null }
     for (let k2 in tree) {
         let v2 = tree[k2]
         if (v2.tag == 'template') {
-            read.html = tdom.patch(v2).replace(/\\/g, '\\\\').replace(/'/g, '\\\'')
+            read.html = tdom.patch(v2).replace(/\\/g, '\\\\').replace(/`/g, '\\\`')
         }
         if (v2.tag == 'script') {
             read.js = v2.children[0].text
         }
     }
-    
     let res = read.js
-    res = Util.scriptReplace(res, /export\s*default\s*{\s*/, `export default { html: '${read.html}', `)
-    let name_js = v.replace(/\.vior\.html$/, '.js'),
-        name = v.replace(/\.vior\.html$/, ''),
-        name_ori = v
-    fs.writeFileSync(rpath + '/dist/' + name_js, res)
+    let _res = `
+        import origin from './_${name_js}'
+        origin.html = \`${read.html}\`
+        export default origin
+    `
     
+    fs.writeFileSync(rpath + '/dist/_' + name_js, res)
+    fs.writeFileSync(rpath + '/dist/' + name_js, _res)
     imports[name] = './dist/' + name_js
 }
 arr = fs.readdirSync(rpath + '/node_modules')
@@ -67,9 +72,29 @@ for (let k in arr) {
 let content = fs.readFileSync(rpath + '/_index.html', 'utf-8')
 let importMap = {
     imports: imports
+}, importmap = JSON.stringify(importMap)
+let vnode = tdom.read(content), rtree
+try {
+    for (let k in vnode.children) {
+        let v = vnode.children[k]
+        if (v.tag == 'html')
+            rtree = v.children
+    }
+    let ok = false
+    for (let k in rtree) {
+        let v = rtree[k]
+        if (v.tag == 'head') {
+            ok = true
+            v.children.push(tdom.read(`<script type="importmap">${importmap}</script>`).children[0])
+        }
+    }
+    if (! ok)
+        throw new Error()
+} catch (ex) {
+    console.log(chalk.red('error when paring file: _index.html'))
+    process.exit(1)
 }
-let repHtml = `<script type="importmap">${JSON.stringify(importMap)}</script>\n</head>`
-content = Util.scriptReplace(content, `</head>`, repHtml)
+content = tdom.patch(vnode)
 fs.writeFileSync(rpath + '/index.html', content)
 
 spinner.stop()
