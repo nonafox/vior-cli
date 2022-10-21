@@ -20,6 +20,7 @@ if (! projectName) {
 }
 let rpath = path.resolve(projectName)
 
+console.time('* time')
 let spinner = ora('downloading template').start()
 console.log()
 if (fs.existsSync(rpath))
@@ -28,14 +29,15 @@ if (fs.existsSync(rpath))
 download('jwhgzs/vior-sfc-template', rpath, {clone: false}, function (err) {
     spinner.stop()
     if (err) {
-        console.log(chalk.red('download error!'))
+        console.log(chalk.red('* download error!'))
         process.exit(1)
     }
-    console.log(chalk.green('download success!'))
+    console.log(chalk.green('* download success!'))
     
     spinner = ora('installing dependencies').start()
     console.log()
     execSync(`cd ${rpath} && npm install`)
-    console.log(chalk.green('install success!'))
     spinner.stop()
+    console.log(chalk.green('* install success!'))
+    console.timeEnd('* time')
 })

@@ -13,6 +13,7 @@ let tdom = new TDom()
 program.parse(process.argv)
 let rpath = path.resolve('.')
 
+console.time('* time')
 let spinner = ora('compiling project').start()
 console.log()
 
@@ -72,4 +73,5 @@ content = Util.scriptReplace(content, `</head>`, repHtml)
 fs.writeFileSync(rpath + '/index.html', content)
 
 spinner.stop()
-console.log(chalk.green('compile complete!'))
+console.log(chalk.green('* compile complete!'))
+console.timeEnd('* time')
