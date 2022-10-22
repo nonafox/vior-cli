@@ -21,7 +21,7 @@ watch(rpath, { recursive: true }, (evt, fname) => {
     console.log()
     console.time('* time')
     execSync(`vior compile`)
-    console.log(chalk.green(`* hot updated!`))
+    console.log(chalk.green(`* auto compiled!`))
     console.timeEnd('* time')
     spinner.stop()
 })

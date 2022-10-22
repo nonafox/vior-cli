@@ -1,7 +1,7 @@
 {
     "name": "vior-cli",
     "type": "module",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "description": "A simple CLI for Vior.",
     "main": "",
     "scripts": {
@@ -11,7 +11,7 @@
         "vior": "bin/vior.js",
         "vior-init": "bin/vior-init.js",
         "vior-complile": "bin/vior-complile.js",
-        "vior-hotupdate": "bin/vior-hotupdate.js"
+        "vior-auto": "bin/vior-auto.js"
     },
     "dependencies": {
         "chalk": "^2.3.0",
