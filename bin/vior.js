@@ -10,5 +10,6 @@ let packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package
 program
     .version(packageJson.version)
     .command('init', 'initialize a Vior SFC project.')
-    .command('compile', 'compile a Vior SFC project.')
+    .command('compile', 'compile the current Vior SFC project.')
+    .command('hotupdate', 'enable hot updating (automatically compiling) on current Vior SFC project.')
     .parse(process.argv)

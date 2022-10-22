@@ -55,5 +55,10 @@ vior compile
     }
 </script>
 ```
+## 自动编译
+```
+vior hotupdate
+```
+这样，Vior将监听你的项目文件，并在它们更新时自动触发编译。
 ## 示例
 参见[vior-sfc-template](https://github.com/jwhgzs/vior-sfc-template)。或可直接用本CLI初始化新项目，默认情况下默认模板中有示例文件。

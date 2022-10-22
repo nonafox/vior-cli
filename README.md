@@ -32,7 +32,7 @@ vior compile
 ```
 Then Vior will compile the source code from `./src` into `./dist` folder.
 
-Compiled files will be `.js` files, as custom components in Vior. You can import each other of them among themselves, or in the entry HTML file `index.html`.
+Compiled files will be `.js` files, as custom components in Vior. You can import each other of them among themselves, or in the entry HTML file `_index.html`.
 ## SFC Format
 ```html
 <template>
@@ -57,5 +57,10 @@ Compiled files will be `.js` files, as custom components in Vior. You can import
     }
 </script>
 ```
+## Hot Updating
+```
+vior hotupdate
+```
+Then Vior will watch your project files, and do compiling when the files change.
 ## Examples
 See [vior-sfc-template](https://github.com/jwhgzs/vior-sfc-template), or initialize a new SFC project (which has a demo in it by defaultly) by Vior-CLI.
