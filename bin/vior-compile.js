@@ -85,7 +85,7 @@ try {
         let v = rtree[k]
         if (v.tag == 'head') {
             ok = true
-            v.children.push(tdom.read(`<script type="importmap">${importmap}</script>`).children[0])
+            v.children.splice(0, 0, tdom.read(`<script type="importmap">${importmap}</script>`).children[0])
         }
     }
     if (! ok)
