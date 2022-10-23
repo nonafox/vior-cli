@@ -20,7 +20,10 @@ watch(rpath, { recursive: true }, (evt, fname) => {
     let spinner = ora('compiling').start()
     console.log()
     console.time('* time')
-    execSync(`vior compile`)
+    try { execSync(`vior compile`) } catch (ex) {
+        console.log(chalk.red('error when compiling! please simply run compile to display the errors.'))
+        process.exit(1)
+    }
     console.log(chalk.green(`* auto compiled!`))
     console.timeEnd('* time')
     spinner.stop()
