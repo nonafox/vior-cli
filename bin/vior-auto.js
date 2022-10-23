@@ -11,12 +11,13 @@ import watch from 'node-watch'
 program.parse(process.argv)
 let rpath = path.resolve('.')
 
-watch(rpath, { recursive: true }, (evt, fname) => {
+let handler = (evt = null, fname = '') => {
     let spath = path.relative(rpath, fname)
-    if (! (spath == '_index.html' || spath.indexOf('src/') === 0
+    if (fname && ! (spath == '_index.html' || spath.indexOf('src/') === 0
            || spath.indexOf('node_modules/') === 0))
         return
-    console.log(chalk.blue(`- File changed: ${spath}`))
+    if (fname)
+        console.log(chalk.blue(`- File changed: ${spath}`))
     let spinner = ora('compiling').start()
     console.log()
     console.time('* time')
@@ -27,4 +28,7 @@ watch(rpath, { recursive: true }, (evt, fname) => {
     console.log(chalk.green(`* auto compiled!`))
     console.timeEnd('* time')
     spinner.stop()
-})
+}
+watch(rpath, { recursive: true }, handler)
+
+handler()
