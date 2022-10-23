@@ -17,9 +17,26 @@ console.time('* time')
 let spinner = ora('compiling project').start()
 console.log()
 
+let imports = {}
+if (fs.existsSync(rpath + '/node_modules')) {
+    let arr = fs.readdirSync(rpath + '/node_modules')
+    for (let k in arr) {
+        let v = arr[k]
+        if (fs.statSync(rpath + '/node_modules/' + v).isDirectory()) {
+            let fpath = rpath + '/node_modules/' + v
+            let config = JSON.parse(fs.readFileSync(fpath + '/package.json'))
+            imports[v + '/'] = './node_modules/' + v + '/'
+            imports[v] = './node_modules/' + v + '/' + (config.main || '')
+        }
+    }
+} else {
+    console.log(chalk.red(`/node_modules not found! please make sure that you are in the Vior project, and have installed your dependencies.`))
+    process.exit(1)
+}
+
+let arr = fs.readdirSync(rpath + '/src')
 if (! fs.existsSync(rpath + '/dist'))
     fs.mkdirSync(rpath + '/dist')
-let arr = fs.readdirSync(rpath + '/src'), imports = {}
 for (let k in arr) {
     let v = arr[k]
     try {
@@ -61,16 +78,6 @@ for (let k in arr) {
     } catch (ex) {
         console.log(chalk.red('error when compiling file: src/' + v))
         process.exit(1)
-    }
-}
-arr = fs.readdirSync(rpath + '/node_modules')
-for (let k in arr) {
-    let v = arr[k]
-    if (fs.statSync(rpath + '/node_modules/' + v).isDirectory()) {
-        let fpath = rpath + '/node_modules/' + v
-        let config = JSON.parse(fs.readFileSync(fpath + '/package.json'))
-        imports[v + '/'] = './node_modules/' + v + '/'
-        imports[v] = './node_modules/' + v + '/' + (config.main || '')
     }
 }
 
