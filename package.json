@@ -1,7 +1,7 @@
 {
     "name": "vior-cli",
     "type": "module",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "A simple CLI for Vior.",
     "main": "",
     "scripts": {
@@ -21,7 +21,7 @@
         "node-watch": "^0.7.3",
         "ora": "^1.3.0",
         "rimraf": "^2.6.2",
-        "vior": "^0.4.0"
+        "vior": "latest"
     },
     "repository": {
         "type": "git",
